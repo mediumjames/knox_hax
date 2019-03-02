@@ -1,188 +1,148 @@
 import React from 'react';
 import {
-  Image,
+  KeyboardAvoidingView,
+  TextInput,
+  Button,
   Platform,
-  ScrollView,
+  StatusBar,
   StyleSheet,
+  View,
+  Image,
   Text,
   TouchableOpacity,
-  View,
+  Keyboard
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import {
+  KeyboardAwareScrollView
+} from 'react-native-keyboard-aware-scroll-view';
+import { TextField } from 'react-native-material-textfield';
+import MapView from 'react-native-maps'
+import Amplify, { Auth, API } from 'aws-amplify';
 
-import { MonoText } from '../components/StyledText';
+export default class SignIn extends React.Component {
 
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
+  state = {
+    email: '',
+    email_error: '',
+    password: '',
+    password_error: '',
+    user: {}
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
-      </View>
-    );
+  static navigationOptions = {
+    header: null
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
+  onChangeText(key, value) {
+    console.log(key);
+    this.setState({
+      [key]: value,
+      [key+'_error']: ''
+    })
+  }
 
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+  checkFull(key) {
+    if (this.state[key] == '') {
+      this.setState({
+        [key+'_error']: 'Oops! You forgot this one'
+      })
     }
   }
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
+  async getData() {
+    const get_response = await API.get('dynamoAPI', '/items/' + this.state.email);
+    return get_response;
+  }
 
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
+  render() {
+    return (
+        <KeyboardAwareScrollView enableOnAndroid={true}
+         enableAutoAutomaticScroll={(Platform.OS === 'ios')}
+         style={styles.container}>
+            <View style={styles.logoContainer}>
+              <Text style={styles.title}>Got Pot Holes?</Text>
+            </View>
+            <View style={styles.btnContainer}>
+              <TouchableOpacity
+                style={styles.btnSignIn}
+                onPress={this.checkFull.bind(this)}>
+                <Text style={styles.btnText}>Report Pothole</Text>
+              </TouchableOpacity>
+            </View>
+        </KeyboardAwareScrollView>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
+  logoContainer: {
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    flexGrow: 1,
+    marginTop: 50
   },
-  welcomeImage: {
+  logo: {
     width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+    height: 100,
+    marginBottom: 20,
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+  title: {
+    color: '#58595B',
+    fontWeight: 'bold',
+    width: '80%',
     textAlign: 'center',
+    fontSize: 24
   },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
+  form: {
+    padding: 20,
+    flexGrow: 1
+  },
+  btnSignIn: {
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
+    backgroundColor: '#58595B',
+    width: '50%',
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 20,
   },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
+  btnSignUp: {
+    alignItems: 'center',
+    backgroundColor: '#58595B',
+    width: '50%',
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 20,
+  },
+  btnText: {
     textAlign: 'center',
+    color: '#FFF',
+    fontWeight: 'bold',
   },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
+  btnContainer: {
     alignItems: 'center',
+    marginBottom: 50,
   },
-  helpLink: {
-    paddingVertical: 15,
+  signUpText: {
+    marginTop: 50,
+    fontSize: 18,
   },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  input: {
+    height: 50,
+    borderBottomWidth: 2,
+    borderBottomColor: '#FF8200',
+    margin: 10
   },
+  inputText: {
+    paddingLeft: 12,
+  },
+  inputContainer: {
+    paddingLeft: 12,
+    backgroundColor: '#F6F6F6',
+  },
+  fieldContainer: {
+    marginBottom: 20
+  }
 });
