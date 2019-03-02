@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "AWS Amplify JavaScript Example",
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "aws-amplify": "^1.1.19",
     "react": "^16.8.3"
   },
