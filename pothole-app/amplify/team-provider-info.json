@@ -1,0 +1,14 @@
+{
+    "env": {
+        "awscloudformation": {
+            "AuthRoleName": "pothole-app-20190302113329-authRole",
+            "UnauthRoleArn": "arn:aws:iam::566666435949:role/pothole-app-20190302113329-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::566666435949:role/pothole-app-20190302113329-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "pothole-app-20190302113329-deployment",
+            "UnauthRoleName": "pothole-app-20190302113329-unauthRole",
+            "StackName": "pothole-app-20190302113329",
+            "StackId": "arn:aws:cloudformation:us-east-1:566666435949:stack/pothole-app-20190302113329/e9776720-3d08-11e9-92d4-0a009cdf2216"
+        }
+    }
+}
