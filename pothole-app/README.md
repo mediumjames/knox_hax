@@ -19,12 +19,11 @@
 
 
 7. Clone the repo using  
-`git clone git@github.com:dsande30/COSC402.git` or   
-`git clone https://github.com/dsande30/COSC402.git`  
+`git clone https://github.com/mediumjames/knox_hax.git`
 
 8. Start the project  
-`cd UTKMentorApp`  
-`expo start`  
+`cd pothole-app`  
+`npm start`  
 
 9. Create an Expo account (also used to sign in to one) using the command `s`
 
