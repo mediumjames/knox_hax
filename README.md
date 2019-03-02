@@ -3,11 +3,11 @@ Repo for Knoxville City Hackathon 2019
 
 Gmail: knoxhacksboys@gmail.com
        
-       james8chicken!
+james8chicken!
  
  AWS:  knoxhacksboys@gmail.com
        
-       james8chicken!
+james8chicken!
 
 
 User Types
