@@ -1,1 +1,8 @@
-{}
+{
+	"auth": {
+		"potholeCognito": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation"
+		}
+	}
+}

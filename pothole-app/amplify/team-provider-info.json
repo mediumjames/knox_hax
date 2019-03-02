@@ -9,6 +9,11 @@
             "UnauthRoleName": "pothole-app-20190302113329-unauthRole",
             "StackName": "pothole-app-20190302113329",
             "StackId": "arn:aws:cloudformation:us-east-1:566666435949:stack/pothole-app-20190302113329/e9776720-3d08-11e9-92d4-0a009cdf2216"
+        },
+        "categories": {
+            "auth": {
+                "potholeCognito": {}
+            }
         }
     }
 }
